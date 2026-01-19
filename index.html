@@ -54,7 +54,7 @@
                 Oportunidade Pré-Lançamento
             </span>
             <h2 class="text-3xl md:text-5xl font-serif font-medium text-white mb-6 leading-tight">
-                O seu próximo grande investimento em <span class="text-gold-400">[Bairro]</span> com a segurança de quem entende de números.
+                O seu próximo grande investimento <span class="text-gold-400">nas regiões mais valorizadas de São Paulo</span> com a segurança de quem entende de números.
             </h2>
             <p class="text-lg md:text-xl text-gray-300 mb-10 max-w-2xl mx-auto font-light">
                 Aproveite a tabela zero de pré-lançamento. Consultoria especializada em fluxo de pagamento para autônomos e investidores exigentes.
@@ -87,7 +87,7 @@
                 </div>
                 <h3 class="text-xl font-bold text-navy-900 mb-2">Localização Estratégica</h3>
                 <p class="text-gray-600 text-sm leading-relaxed">
-                    Em [Bairro], próximo aos principais eixos de negócios e lazer. Liquidez garantida para venda ou locação futura.
+                    Nas regiões mais valorizadas de São Paulo, próximo aos principais eixos de negócios e lazer. Liquidez garantida para venda ou locação futura.
                 </p>
             </div>
             <!-- Item 3 -->
@@ -152,21 +152,28 @@
         <p>&copy; 2024 Consultoria Prime. Todos os direitos reservados.</p>
     </footer>
 
-    <script>
-        const scriptURL = 'COLOQUE_AQUI_A_URL_DO_GOOGLE_SCRIPT'; // Substitua pela sua URL
+<script>
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbx3KAaGY7tzUwj5zreDW8CJz07Tb3-qIHobMJjAK2EgZsAB7aSyj3DuV7B1A8ilhQVP/exec';
         const form = document.getElementById('leadForm');
         const msg = document.getElementById('msg');
         const btnSubmit = document.getElementById('btnSubmit');
+
+        // CONFIGURAÇÃO DO REDIRECT
+        const SEU_WHATSAPP = '5511999999999'; // <-- COLOQUE SEU NÚMERO COM DDD (Só números)
 
         form.addEventListener('submit', e => {
             e.preventDefault();
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Enviando...';
             
+            const nomeCliente = form.nome.value;
+            const whatsCliente = form.whatsapp.value;
+            const objetivoCliente = form.objetivo.value;
+
             const formData = {
-                nome: form.nome.value,
-                whatsapp: form.whatsapp.value,
-                objetivo: form.objetivo.value
+                nome: nomeCliente,
+                whatsapp: whatsCliente,
+                objetivo: objetivoCliente
             };
 
             fetch(scriptURL, { method: 'POST', body: JSON.stringify(formData)})
@@ -174,11 +181,21 @@
                     msg.classList.remove('hidden');
                     form.reset();
                     btnSubmit.innerHTML = 'ENVIADO!';
+
+                    // MENSAGEM DO WHATSAPP
+                    const textoWpp = window.encodeURIComponent(`Olá! Sou ${nomeCliente}. Acabei de ver sua consultoria e gostaria de receber a simulação de fluxo de pagamento para o perfil de ${objetivoCliente}.`);
+                    const urlWpp = `https://wa.me/${SEU_WHATSAPP}?text=${textoWpp}`;
+
+                    // REDIRECIONA EM 2 SEGUNDOS (Dá tempo do usuário ler a mensagem de sucesso)
+                    setTimeout(() => {
+                        window.open(urlWpp, '_blank');
+                    }, 2000);
+
                     setTimeout(() => {
                         msg.classList.add('hidden');
                         btnSubmit.disabled = false;
                         btnSubmit.innerHTML = '<span>QUERO MINHA SIMULAÇÃO</span><i class="fas fa-arrow-right text-sm"></i>';
-                    }, 5000)
+                    }, 5000);
                 })
                 .catch(error => {
                     console.error('Error!', error.message);
